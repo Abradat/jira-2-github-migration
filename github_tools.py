@@ -41,19 +41,21 @@ def create_issue(repo, owner, title, body=None, assignees=None, labels=None, iss
         conn.commit()
         conn.close()
     
-    return f"Issue {title} created successfully with number {issue_number}"
+    print(f"Issue {title} created successfully with number {issue_number}") 
+    return issue_number
 
 def create_comment(repo, owner, issue_number, body):
     url = f"{GITHUB_API_URL}/repos/{owner}/{repo}/issues/{issue_number}/comments"
     headers = {
         "Authorization": f"Bearer {GITHUB_TOKEN}",
-        "Accept": "application/vnd.github.v3+json",
+        "Accept": "application/vnd.github+json",
         "X-GitHub-Api-Version": "2022-11-28"
     }
     data = {
         "body": body
     }
     response = requests.post(url, headers=headers, json=data)
+    print(f"Comment added to issue #{issue_number}")
     if (response.status_code != 201):
         raise Exception(response.text)
     return "Comment added successfully"
