@@ -1,8 +1,8 @@
 {
   "github_repo": "",
   "github_username": "",
-  "csv_file": "",
-  "output_file": "",
-  "j2g_json_file": "",
-  "database": ""
+  "input_csv_file": "files/input/sample.csv",
+  "output_json_file": "files/output/output.json",
+  "j2g_json_file": "jira_to_github_username.json",
+  "database": "files/output/migration.db"
 }
