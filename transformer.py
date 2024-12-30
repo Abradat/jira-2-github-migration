@@ -16,30 +16,33 @@ def load_username_mapping(mapping_file):
 def extract_fields(row, username_mapping):
     assignee = row.get("Assignee")
     github_assignee = username_mapping.get(assignee, "")
-    labels = [row.get("Issue Type"), f"priority: {row.get('Priority')}", "status: ALCS Backlog"]
+    labels = [row.get("Issue Type")]
 
     body = f"**Jira Ticket**: {row.get('Issue key')}\n\n" \
            f"**Description**: {row.get('Description')}\n\n" \
            f"**Last Updated**: {row.get('Updated')}"
 
     fields = {
-        "Summary": row.get("Summary"),
-        "Issue key": row.get("Issue key"),
-        "Issue id": row.get("Issue id"),
-        "Issue Type": row.get("Issue Type"),
-        "Status": row.get("Status"),
-        "Priority": row.get("Priority"),
-        "Assignee": github_assignee,
-        "Created": row.get("Created"),
-        "Updated": row.get("Updated"),
-        "Description": row.get("Description"),
-        "Comments": extract_comments(row),
+        "summary": row.get("Summary"),
+        "issuekey": row.get("Issue key"),
+        "issueId": row.get("Issue id"),
+        "issueType": row.get("Issue Type"),
+        "status": row.get("Status"),
+        "priority": row.get("Priority"),
+        "assignee": github_assignee,
+        "created": row.get("Created"),
+        "updated": row.get("Updated"),
+        "description": row.get("Description"),
+        "comments": extract_comments(row),
         "isIssueCreated": False,
-        "isPriorityAdded": False,
-        "isCommentAdded": False,
+        "areProjectFieldsAdded": False,
+        "areCommentsAdded": False,
         "body": body,  # Updated body with markdown format
-        "github_number": "",
-        "labels": labels
+        "githubNumber": "",
+        "issueNodeId": "",
+        "projectIssueNodeId": "",
+        "labels": labels,
+        "epic": row.get("Custom field (Epic Link)")
     }
     return fields
 
@@ -86,20 +89,23 @@ def save_to_db(json_objects, db_file):
             description TEXT,
             comment TEXT,
             is_issue_created BOOLEAN,
-            is_priority_added BOOLEAN,
-            is_comment_added BOOLEAN,
+            are_project_fields_added BOOLEAN,
+            are_comments_added BOOLEAN,
             body TEXT,
             github_number TEXT,
-            labels TEXT
+            issue_node_id TEXT,
+            project_issue_node_id TEXT,
+            labels TEXT,
+            epic TEXT
         )
     ''')
     for obj in json_objects:
         cursor.execute('''
             INSERT INTO issues (
-                summary, issue_key, issue_id, issue_type, status, priority, assignee, created, updated, description, comment, is_issue_created, is_priority_added, is_comment_added, body, github_number, labels
-            ) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
+            summary, issue_key, issue_id, issue_type, status, priority, assignee, created, updated, description, comment, is_issue_created, are_project_fields_added, are_comments_added, body, github_number, issue_node_id, project_issue_node_id, labels, epic
+            ) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
         ''', (
-            obj["Summary"], obj["Issue key"], obj["Issue id"], obj["Issue Type"], obj["Status"], obj["Priority"], obj["Assignee"], obj["Created"], obj["Updated"], obj["Description"], json.dumps(obj["Comments"]), obj["isIssueCreated"], obj["isPriorityAdded"], obj["isCommentAdded"], obj["body"], obj["github_number"], json.dumps(obj["labels"])
+            obj["summary"], obj["issuekey"], obj["issueId"], obj["issueType"], obj["status"], obj["priority"], obj["assignee"], obj["created"], obj["updated"], obj["description"], json.dumps(obj["comments"]), obj["isIssueCreated"], obj["areProjectFieldsAdded"], obj["areCommentsAdded"], obj["body"], obj["githubNumber"], obj["issueNodeId"], obj["projectIssueNodeId"], json.dumps(obj["labels"]), obj["epic"]
         ))
     conn.commit()
     conn.close()
