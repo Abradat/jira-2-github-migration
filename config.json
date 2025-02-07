@@ -5,7 +5,10 @@
   "input_csv_file": "files/input/sample.csv",
   "output_json_file": "files/output/output.json",
   "j2g_json_file": "jira_to_github_username.json",
-  "database": "files/output/migration.db"
   "database": "files/output/migration.db",
-  "migrate_offset_number": 1
+  "migrate_offset_number": 1,
+  "add_to_project": true,
+  "add_status": true,
+  "add_epic": false,
+  "add_priority": true
 }
