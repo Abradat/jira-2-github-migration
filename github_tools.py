@@ -190,7 +190,7 @@ def get_field_ids(project_id):
     if response.status_code != 200:
         raise Exception(f"GraphQL API call failed: {response.text}")
     fields = response.json()["data"]["node"]["fields"]["nodes"]
-    return {field["name"]: field for field in fields}
+    return {field["name"]: field for field in fields if field}
 
 def add_custom_fields_to_project(project_id, issue_node_id, custom_fields):
     headers = {
@@ -228,3 +228,32 @@ def add_custom_fields_to_project(project_id, issue_node_id, custom_fields):
             raise Exception(f"GraphQL API call failed: {response.text}")
         responses.append(response.json())
     return responses
+
+def get_org_project_id(org, project_name):
+    headers = {
+        "Authorization": f"Bearer {GITHUB_GRAPHQL_TOKEN}",
+        "Content-Type": "application/json"
+    }
+    query = """
+    query($org: String!) {
+      organization(login: $org) {
+        projectsV2(first: 100) {
+          nodes {
+            id
+            title
+          }
+        }
+      }
+    }
+    """
+    variables = {
+        "org": org
+    }
+    response = requests.post(GITHUB_GRAPHQL_URL, headers=headers, json={"query": query, "variables": variables})
+    if response.status_code != 200:
+        raise Exception(f"GraphQL API call failed: {response.text}")
+    projects = response.json()["data"]["organization"]["projectsV2"]["nodes"]
+    for project in projects:
+        if project["title"] == project_name:
+            return project["id"]
+    raise ValueError(f"Project '{project_name}' not found")
