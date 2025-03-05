@@ -9,7 +9,7 @@ Follow these steps to set up the migration tool:
 ### 1. Clone this repository:
 
 ```sh
-git clone <repository-url>
+git clone https://github.com/Abradat/jira-2-github-migration
 ```
 
 ### 2. Create a virtual environment:
@@ -48,10 +48,11 @@ Create a `.env` file in the root directory with your GitHub API tokens:
 GITHUB_TOKEN=<your-github-token>
 ```
 
-Make sure your token has the following permissions:
+Make sure your token is `classic` has the following permissions:
 
 - `repo` (Full control of private repositories)
 - `project` (For project access)
+- `admin:org` (Full control of orgs and teams, read and write org projects)
 
 ### Config File (config.json)
 
@@ -62,16 +63,16 @@ Modify the `config.json` file to match your migration requirements:
   "github_repo": "Target GitHub repository name",
   "github_username": "GitHub username or organization name",
   "github_project_name": "GitHub project board name",
-  "is_org_project": true,
+  "is_org_project": true, // if project is organizational or personal
   "input_csv_file": "Path to your Jira CSV export file",
   "output_json_file": "Path where the transformed JSON will be saved",
   "j2g_json_file": "JSON file mapping Jira usernames to GitHub usernames",
   "database": "SQLite database file path",
-  "migrate_offset_number": 100,
-  "add_to_project": true,
-  "add_status": true,
-  "add_epic": true,
-  "add_priority": true
+  "migrate_offset_number": 100, // number of tickets to migrate
+  "add_to_project": true, // flag to add fields to the project
+  "add_status": true, // add "status" field to the project
+  "add_epic": true, // add "epic" field to the project
+  "add_priority": true // add "priority" field to the project
 }
 ```
 
