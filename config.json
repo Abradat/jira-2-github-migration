@@ -2,6 +2,7 @@
   "github_repo": "",
   "github_username": "",
   "github_project_name": "",
+  "is_org_project": true,
   "input_csv_file": "files/input/sample.csv",
   "output_json_file": "files/output/output.json",
   "j2g_json_file": "jira_to_github_username.json",

@@ -10,9 +10,13 @@ def main():
     repo = config["github_repo"]
     owner = config["github_username"]
     project_name = config["github_project_name"]
+    is_org_project = config["is_org_project"]
 
-    # project_id = get_project_id(owner, repo, project_name) # This is for personal projects
-    project_id = get_org_project_id(owner, project_name) # This is for organization projects
+    if is_org_project:
+        project_id = get_org_project_id(owner, project_name)
+    else:
+        project_id = get_project_id(owner, repo, project_name)
+    
     field_ids = get_field_ids(project_id)
     
     issues = fetch_issues_from_db(db_file, 0, config["migrate_offset_number"])
