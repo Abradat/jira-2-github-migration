@@ -5,13 +5,10 @@ from dotenv import load_dotenv
 
 load_dotenv()
 GITHUB_TOKEN = os.getenv('GITHUB_TOKEN')
-GITHUB_GRAPHQL_TOKEN = os.getenv('GITHUB_GRAPHQL_TOKEN')
 
 if not GITHUB_TOKEN:
     raise ValueError("GitHub token not found in environment variables")
 
-if not GITHUB_GRAPHQL_TOKEN:
-    raise ValueError("GitHub GraphQL token not found in environment variables")
 
 GITHUB_API_URL = "https://api.github.com"
 GITHUB_GRAPHQL_URL = "https://api.github.com/graphql"
@@ -103,7 +100,7 @@ def create_milestone(repo, title, state="open", description=None, due_on=None):
 
 def get_project_id(owner, repo, project_name):
     headers = {
-        "Authorization": f"Bearer {GITHUB_GRAPHQL_TOKEN}",
+        "Authorization": f"Bearer {GITHUB_TOKEN}",
         "Content-Type": "application/json"
     }
     query = """
@@ -133,7 +130,7 @@ def get_project_id(owner, repo, project_name):
 
 def add_issue_to_project(project_id, issue_node_id):
     headers = {
-        "Authorization": f"Bearer {GITHUB_GRAPHQL_TOKEN}",
+        "Authorization": f"Bearer {GITHUB_TOKEN}",
         "Content-Type": "application/json"
     }
     query = """
@@ -156,7 +153,7 @@ def add_issue_to_project(project_id, issue_node_id):
 
 def get_field_ids(project_id):
     headers = {
-        "Authorization": f"Bearer {GITHUB_GRAPHQL_TOKEN}",
+        "Authorization": f"Bearer {GITHUB_TOKEN}",
         "Content-Type": "application/json"
     }
     query = """
@@ -194,7 +191,7 @@ def get_field_ids(project_id):
 
 def add_custom_fields_to_project(project_id, issue_node_id, custom_fields):
     headers = {
-        "Authorization": f"Bearer {GITHUB_GRAPHQL_TOKEN}",
+        "Authorization": f"Bearer {GITHUB_TOKEN}",
         "Content-Type": "application/json"
     }
     query = """
@@ -231,7 +228,7 @@ def add_custom_fields_to_project(project_id, issue_node_id, custom_fields):
 
 def get_org_project_id(org, project_name):
     headers = {
-        "Authorization": f"Bearer {GITHUB_GRAPHQL_TOKEN}",
+        "Authorization": f"Bearer {GITHUB_TOKEN}",
         "Content-Type": "application/json"
     }
     query = """
