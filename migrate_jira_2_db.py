@@ -1,5 +1,5 @@
 from config_reader import load_config
-from transformer import load_username_mapping, transform_csv_to_json, save_json, save_to_db
+from transformer import load_mapping, transform_csv_to_json, save_json, save_to_db
 
 # Load configurations
 config = load_config("config.json")
@@ -9,12 +9,16 @@ input_csv = config["input_csv_file"]
 output_json = config["output_json_file"]
 db_file = config["database"]
 username_mapping_file = config["j2g_json_file"]
+epic_mapping_file = config["epic_json_file"]
 
 # Load username mapping
-username_mapping = load_username_mapping(username_mapping_file)
+username_mapping = load_mapping(username_mapping_file)
+
+#Load Epic mapping
+epic_mapping = load_mapping(epic_mapping_file)
 
 # Transform CSV to JSON
-json_objects = transform_csv_to_json(input_csv, username_mapping)
+json_objects = transform_csv_to_json(input_csv, username_mapping, epic_mapping)
 
 # Save JSON to file
 save_json(json_objects, output_json)

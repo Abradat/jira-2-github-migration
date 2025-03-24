@@ -60,9 +60,11 @@ def main():
                         custom_fields_with_ids.append({"fieldId": status_field["id"], "value": status_option_id, "type": "option"})
 
                 # Assign Epic
-                epic_field = field_ids.get("Epic")
-                if epic_field and config["add_epic"]:
-                    custom_fields_with_ids.append({"fieldId": epic_field["id"], "value": epic_value, "type": "text"})
+                epic_field = field_ids.get("EPIC")
+                if epic_field and "options" in epic_field and config["add_epic"]:
+                    epic_option_id = next((opt["id"] for opt in epic_field["options"] if opt["name"].lower() == epic_value.lower()), None)
+                    if epic_option_id:
+                        custom_fields_with_ids.append({"fieldId": epic_field["id"], "value": epic_option_id, "type": "option"})
 
                 # Assign Priority
                 priority_field = field_ids.get("Priority")

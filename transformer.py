@@ -8,14 +8,18 @@ def read_csv(file_path):
         rows = [row for row in reader]
     return rows
 
-def load_username_mapping(mapping_file):
+def load_mapping(mapping_file):
     with open(mapping_file, mode='r', encoding='utf-8') as file:
         mapping = json.load(file)
     return mapping
 
-def extract_fields(row, username_mapping):
+def extract_fields(row, username_mapping, epic_mapping):
     assignee = row.get("Assignee")
     github_assignee = username_mapping.get(assignee, "")
+
+    epic = row.get("Custom field (Epic Link)")
+    epic_name = epic_mapping.get(epic, None)
+
     labels = [row.get("Issue Type")]
 
     body = f"**Jira Ticket**: {row.get('Issue key')}\n\n" \
@@ -42,7 +46,7 @@ def extract_fields(row, username_mapping):
         "issueNodeId": "",
         "projectIssueNodeId": "",
         "labels": labels,
-        "epic": row.get("Custom field (Epic Link)")
+        "epic": epic_name
     }
     return fields
 
@@ -62,9 +66,9 @@ def extract_comments(row):
                 })
     return comments if comments else None
 
-def transform_csv_to_json(file_path, username_mapping):
+def transform_csv_to_json(file_path, username_mapping, epic_mapping):
     rows = read_csv(file_path)
-    json_objects = [extract_fields(row, username_mapping) for row in rows]
+    json_objects = [extract_fields(row, username_mapping, epic_mapping) for row in rows]
     return json_objects
 
 def save_json(json_objects, output_file):
