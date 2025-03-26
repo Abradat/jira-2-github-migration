@@ -3,9 +3,10 @@ import json
 from github_tools import *
 from config_reader import load_config
 from db_utils import *
+from transformer import *
 
 def main():
-    config = load_config("config.json")
+    config = load_config("../config.json")
     db_file = config["database"]
     repo = config["github_repo"]
     owner = config["github_username"]
@@ -53,25 +54,16 @@ def main():
                 custom_fields_with_ids = []
 
                 # Assign Status: ALCS-Backlog
-                status_field = field_ids.get("Status")
-                if status_field and "options" in status_field and config["add_status"]:
-                    status_option_id = next((opt["id"] for opt in status_field["options"] if opt["name"] == "ALCS Backlog"), None)
-                    if status_option_id:
-                        custom_fields_with_ids.append({"fieldId": status_field["id"], "value": status_option_id, "type": "option"})
+                if config["add_status"]:
+                    add_custom_field("Status", "ALCS Backlog", field_ids, custom_fields_with_ids)
 
                 # Assign Epic
-                epic_field = field_ids.get("EPIC")
-                if epic_field and "options" in epic_field and config["add_epic"]:
-                    epic_option_id = next((opt["id"] for opt in epic_field["options"] if opt["name"].lower() == epic_value.lower()), None)
-                    if epic_option_id:
-                        custom_fields_with_ids.append({"fieldId": epic_field["id"], "value": epic_option_id, "type": "option"})
+                if config["add_epic"]:
+                    add_custom_field("Epic", epic_value, field_ids, custom_fields_with_ids)
 
                 # Assign Priority
-                priority_field = field_ids.get("Priority")
-                if priority_field and "options" in priority_field and config["add_priority"]:
-                    priority_option_id = next((opt["id"] for opt in priority_field["options"] if opt["name"].lower() == priority_value.lower()), None)
-                    if priority_option_id:
-                        custom_fields_with_ids.append({"fieldId": priority_field["id"], "value": priority_option_id, "type": "option"})
+                if config["add_priority"]:
+                    add_custom_field("Priority", priority_value, field_ids, custom_fields_with_ids)
 
                 # Add custom fields to the project
                 response = add_custom_fields_to_project(project_id, project_issue_id, custom_fields_with_ids)
