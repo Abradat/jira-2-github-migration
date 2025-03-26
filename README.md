@@ -63,26 +63,20 @@ Modify the `config.json` file to match your migration requirements:
   "github_repo": "Target GitHub repository name",
   "github_username": "GitHub username or organization name",
   "github_project_name": "GitHub project board name",
-  "is_org_project": true, // if project is organizational or personal
+  "is_org_project": true,
   "input_csv_file": "Path to your Jira CSV export file",
-  "output_json_file": "Path where the transformed JSON will be saved",
-  "j2g_json_file": "JSON file mapping Jira usernames to GitHub usernames",
   "database": "SQLite database file path",
-  "migrate_offset_number": 100, // number of tickets to migrate
-  "add_to_project": true, // flag to add fields to the project
-  "add_status": true, // add "status" field to the project
-  "add_epic": true, // add "epic" field to the project
-  "add_priority": true // add "priority" field to the project
-}
-```
-
-### Username Mapping (jira_to_github_username.json)
-
-Create a mapping between Jira and GitHub usernames:
-
-```json
-{
-  "jira_username": "github_username"
+  "migrate_offset_number": 100,
+  "add_to_project": true,
+  "add_status": true,
+  "add_epic": true,
+  "add_priority": true,
+  "jira_to_github_username_mapping": {
+    "JIRA_USERNAME": "GITHUB_USERNAME"
+  },
+  "epic_mapping": {
+    "EPIC_KEY": "EPIC_VALUE"
+  }
 }
 ```
 
