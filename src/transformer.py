@@ -13,7 +13,11 @@ def load_mapping(mapping_file):
         mapping = json.load(file)
     return mapping
 
-def extract_fields(row, username_mapping, epic_mapping):
+def extract_fields(row, config):
+    username_mapping = config["jira_to_github_username_mapping"]
+    epic_mapping = config["epic_mapping"]
+
+
     assignee = row.get("Assignee")
     github_assignee = username_mapping.get(assignee, "")
 
@@ -66,9 +70,18 @@ def extract_comments(row):
                 })
     return comments if comments else None
 
-def transform_csv_to_json(file_path, username_mapping, epic_mapping):
+def add_custom_field(field_name, field_value, field_ids, custom_fields_with_ids):
+    field_id = field_ids.get(field_name)
+    if field_id and "options" in field_id:
+        option_id = next((opt["id"] for opt in field_id["options"] if opt["name"].lower() == field_value.lower()), None)
+        if option_id:
+            custom_fields_with_ids.append({"fieldId": field_id["id"], "value": option_id, "type": "option"})
+    elif field_id:
+        custom_fields_with_ids.append({"fieldId": field_id["id"], "value": field_value, "type": "text"})
+
+def transform_csv_to_json(file_path, config):
     rows = read_csv(file_path)
-    json_objects = [extract_fields(row, username_mapping, epic_mapping) for row in rows]
+    json_objects = [extract_fields(row, config) for row in rows]
     return json_objects
 
 def save_json(json_objects, output_file):

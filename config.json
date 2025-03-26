@@ -3,14 +3,17 @@
   "github_username": "",
   "github_project_name": "",
   "is_org_project": true,
-  "input_csv_file": "files/input/sample.csv",
-  "output_json_file": "files/output/output.json",
-  "j2g_json_file": "jira_to_github_username.json",
-  "epic_json_file": "epic_mapping.json",
-  "database": "files/output/migration.db",
+  "input_csv_file": "../files/input/sample.csv",
+  "database": "../files/output/migration.db",
   "migrate_offset_number": 1,
   "add_to_project": true,
   "add_status": true,
   "add_epic": true,
-  "add_priority": true
+  "add_priority": true,
+  "jira_to_github_username_mapping": {
+    "JIRA_USERNAME": "GITHUB_USERNAME"
+  },
+  "epic_mapping": {
+    "EPIC_KEY": "EPIC_VALUE"
+  }
 }
