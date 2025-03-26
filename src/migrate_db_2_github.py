@@ -7,7 +7,7 @@ from transformer import *
 
 def main():
     config = load_config("../config.json")
-    db_file = config["database"]
+    db_file = '../' + config["database"]
     repo = config["github_repo"]
     owner = config["github_username"]
     project_name = config["github_project_name"]

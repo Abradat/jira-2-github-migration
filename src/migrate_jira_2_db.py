@@ -5,8 +5,8 @@ from transformer import transform_csv_to_json, save_to_db
 config = load_config("../config.json")
 
 # Extract configurations
-input_csv =  config["input_csv_file"]
-db_file = config["database"]
+input_csv =  '../' + config["input_csv_file"]
+db_file = '../' + config["database"]
 
 # Transform CSV to JSON
 json_objects = transform_csv_to_json(input_csv, config)
