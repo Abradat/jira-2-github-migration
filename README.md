@@ -1,6 +1,6 @@
 # Jira to GitHub Migration Tool
 
-This tool automates the migration of Jira issues to GitHub issues, including comments, labels, and project fields.
+This tool automates the migration of ALCS Jira issues to GitHub issues, including comments, labels, and project fields.
 
 ## Installation
 
@@ -9,7 +9,7 @@ Follow these steps to set up the migration tool:
 ### 1. Clone this repository:
 
 ```sh
-git clone https://github.com/Abradat/jira-2-github-migration
+git clone https://github.com/bcgov/alcs-jira-migration
 ```
 
 ### 2. Create a virtual environment:
